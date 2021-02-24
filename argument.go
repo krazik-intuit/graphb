@@ -102,7 +102,6 @@ func ArgumentSlice(name string, values ...[]Argument) Argument {
 	return Argument{name, argArgSlice(values)}
 }
 
-
 /////////////////////////////
 // Primitive Wrapper Types //
 /////////////////////////////
@@ -143,11 +142,10 @@ func (v argString) stringChan() <-chan string {
 	return tokenChan
 }
 
-
 // argBlockString represents a block string value.
 type argBlockString string
 
-func (v argBlockString) stringChan() <- chan string {
+func (v argBlockString) stringChan() <-chan string {
 	tokenChan := make(chan string)
 	go func() {
 		tokenChan <- fmt.Sprintf(`"""%s"""`, v)
@@ -155,7 +153,6 @@ func (v argBlockString) stringChan() <- chan string {
 	}()
 	return tokenChan
 }
-
 
 // argEnum represents a enum value.
 type argEnum string
