@@ -64,6 +64,10 @@ func ArgumentString(name string, value string) Argument {
 	return Argument{name, argString(value)}
 }
 
+func ArgumentQuotedString(name string, value string) Argument {
+	return Argument{name, argQuotedString(value)}
+}
+
 func ArgumentBlockString(name string, value string) Argument {
 	return Argument{name, argBlockString(value)}
 }
@@ -137,6 +141,18 @@ func (v argString) stringChan() <-chan string {
 	tokenChan := make(chan string)
 	go func() {
 		tokenChan <- fmt.Sprintf(`"%s"`, v)
+		close(tokenChan)
+	}()
+	return tokenChan
+}
+
+// argQuotedString represents a quoted string value.
+type argQuotedString string
+
+func (v argQuotedString) stringChan() <-chan string {
+	tokenChan := make(chan string)
+	go func() {
+		tokenChan <- fmt.Sprintf(`"\\"%s\\""`, v)
 		close(tokenChan)
 	}()
 	return tokenChan
